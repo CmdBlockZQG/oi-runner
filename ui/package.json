@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vscode/codicons": "^0.0.32",
+    "@vscode/webview-ui-toolkit": "^1.2.0",
+    "i": "^0.3.7",
+    "npm": "^9.2.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {

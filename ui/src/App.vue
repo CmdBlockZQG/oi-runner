@@ -1,29 +1,84 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="container">
+    <vscode-panels>
+      <vscode-panel-tab id="io">STD IN/OUT</vscode-panel-tab>
+      <vscode-panel-tab id="compiler">STDERR</vscode-panel-tab>
+
+      <vscode-panel-view id="io">
+        io
+      </vscode-panel-view>
+      <vscode-panel-view id="compiler">
+        compiler
+      </vscode-panel-view>
+    </vscode-panels>
+    <div id="action">
+      <vscode-dropdown>
+        <vscode-option>C++14 -O2</vscode-option>
+        <vscode-option>Python3</vscode-option>
+      </vscode-dropdown>
+      <vscode-button appearance="icon" aria-label="Compile">
+        <span class="codicon codicon-extensions"></span>
+      </vscode-button>
+      <vscode-button appearance="icon" aria-label="Run">
+        <span class="codicon codicon-debug-start"></span>
+      </vscode-button>
+      <vscode-button appearance="icon" aria-label="Compile&Run">
+        <span class="codicon codicon-run-all"></span>
+      </vscode-button>
+      <vscode-button appearance="icon" aria-label="Stop" disabled>
+        <span class="codicon codicon-debug-stop"></span>
+      </vscode-button>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
+<script setup>
+  import { inject, ref } from 'vue'
+  import {
+    provideVSCodeDesignSystem,
+    vsCodeButton,
+    vsCodePanels,
+    vsCodePanelTab,
+    vsCodePanelView,
+    vsCodeDropdown,
+    vsCodeOption
+  } from '@vscode/webview-ui-toolkit'
+  
+  provideVSCodeDesignSystem().register(
+    vsCodeButton(),
+    vsCodePanels(),
+    vsCodePanelTab(),
+    vsCodePanelView(),
+    vsCodeDropdown(),
+    vsCodeOption()
+  )
+  const vscode = inject('vscode')
+
+
+  window.addEventListener('message', e => {
+    console.log('fe-receive:' + e.data)
+  })
+
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+#action {
+  position: absolute;
+  right: 20px;
+  top: 4px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+#action vscode-button {
+  margin-left: 8px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+@media screen and (max-width: 460px) {
+  #container {
+    padding-top: 32px;
+  }
 }
 </style>

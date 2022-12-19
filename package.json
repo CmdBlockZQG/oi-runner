@@ -9,13 +9,33 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./extension.js",
+  "activationEvents": ["onCommand:oi-runner.activate"],
+  "main": "./src/extension.js",
   "contributes": {
     "commands": [{
       "command": "oi-runner.ping",
       "title": "test OI Runner"
     }],
+    "configuration":[
+      {
+        "title": "OI Runner",
+        "properties": {
+          "oi-runner.commands": {
+            "type": "object",
+            "default": {
+              "C++14 -O2": ["cd [dir]; g++  -std=c++14 -o2 -o \"[filename]\"", "&\"[filedir]\""]
+            },
+            "description": "Commands to run when compile or run."
+          },
+          "oi-runner.shell": {
+            "type": "string",
+            "default": "powershell",
+            "enum": ["sh", "powershell", "cmd"],
+            "description": "Use different shell to run command. Use powershell(recommended if available) or cmd on Windows and sh on Linux."
+          }
+        }
+      }
+    ],
     "viewsContainers": {
       "panel": [
         {
