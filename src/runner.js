@@ -2,12 +2,13 @@ const { EventEmitter } = require('events')
 const { spawn } = require('child_process')
 const vscode = require('vscode')
 
+// stdout stderr runFinish compileComplete
 class Runner extends EventEmitter {
-  constructor(document) {
+  constructor(document, config) {
     super()
 
     this._document = document
-    this._config = null
+    this._config = config
     this._process = null
 
     this._status = 0 // 0: idle 1: compiling 2: running
@@ -32,8 +33,6 @@ class Runner extends EventEmitter {
     }
 
     this._status = 1
-
-    this._config = vscode.workspace.getConfiguration('oi-runner', this._document.uri)
 
     const shell = this._config.get('shell')
     const shellArg = {
@@ -70,8 +69,6 @@ class Runner extends EventEmitter {
     }
 
     this._status = 2
-
-    this._config = vscode.workspace.getConfiguration('oi-runner', this._document.uri)
 
     const shell = this._config.get('shell')
     const shellArg = {
@@ -135,3 +132,5 @@ class Runner extends EventEmitter {
     return cmd
   }
 }
+
+module.exports = Runner

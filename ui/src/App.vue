@@ -56,7 +56,7 @@
 
 
   window.addEventListener('message', e => {
-    console.log('fe-receive:' + e.data)
+    console.log('fe-receive:', e.data)
   })
 
 </script>

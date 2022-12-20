@@ -1,4 +1,5 @@
 const vscode = require('vscode')
+const handler = require('./handler.js')
 
 function activate(context) {
   const provider = new PanelProvider(context.extensionUri)
@@ -36,9 +37,9 @@ class PanelProvider {
       ]
     }
     webviewView.webview.html = this._getHtml(webviewView.webview)
+    handler.init(this._view.webview)
     webviewView.webview.onDidReceiveMessage(data => {
-      // this._view.webview.postMessage()
-      console.log('be-receive:' + data)
+      handler.onReceiveMsg(data)
     })
   }
 
