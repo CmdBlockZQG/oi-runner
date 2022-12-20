@@ -1,6 +1,8 @@
 const vscode = require('vscode')
 const Runner = require('./runner.js')
 
+const logChannel = vscode.window.createOutputChannel('OI Runner')
+
 let conf = null
 const runners = {}
 
@@ -9,14 +11,15 @@ let view = null
 function init(webviewView) {
   view = webviewView
   conf = vscode.workspace.getConfiguration('oi-runner')
-  const curDoc = vscode.window.activeTextEditor.document
-  if (curDoc) {
-    registerRunner(curDoc)
+  const curTextEditor = vscode.window.activeTextEditor
+  if (curTextEditor) {
+    registerRunner(curTextEditor.document)
   }
   view.postMessage({
     cmd: 'init',
     langs: Object.keys(conf.get('commands')),
-    doc: curDoc ? curDoc.fileName : undefined
+    exts: conf.get('exts'),
+    doc: curTextEditor ? curTextEditor.document.fileName : ''
   })
 }
 
@@ -26,10 +29,16 @@ function onReceiveMsg(msg) {
       runners[msg.doc].compile(msg.lang)
       break
     case 'run':
-      runners[msg.doc].run(msg.lang)
+      runners[msg.doc].run(msg.lang, msg.stdin)
       break
     case 'stop':
       runners[msg.doc].stop()
+      break
+    case 'showLog':
+      logChannel.show()
+      break
+    case 'clearLog':
+      logChannel.clear()
       break
   }
 }
@@ -49,35 +58,44 @@ function registerRunner(doc) {
   const runner = new Runner(doc, conf)
   runners[doc.fileName] = runner
 
-  runner.on('stdout', data => {
+  runner.on('compileStdout', data => {
+    logChannel.append(data)
+  })
+  runner.on('compileStderr', data => {
+    logChannel.append(data)
+  })
+  runner.on('compileComplete', code => {
+    if (code) {
+      logChannel.append(`\ncompile abort with code ${code}\n`)
+    } else {
+      logChannel.append(`\ncompile complete with code 0\n`)
+    }
+    
+    view.postMessage({
+      cmd: 'compileComplete',
+      doc: doc.fileName,
+      code: code
+    })
+  })
+
+  runner.on('runStdout', data => {
     view.postMessage({
       cmd: 'stdout',
       doc: doc.fileName,
       data: data
     })
   })
-
-  runner.on('stderr', data => {
-    view.postMessage({
-      cmd: 'stderr',
-      doc: doc.fileName,
-      data: data
-    })
+  runner.on('runStderr', data => {
+    logChannel.show()
+    logChannel.append(data)
   })
-
-  runner.on('runFinish', data => {
+  runner.on('runFinish', (code, time) => {
+    logChannel.append(`exit with code ${code} in ${time / 1000}s`)
     view.postMessage({
       cmd: 'runFinish',
       doc: doc.fileName,
-      code: data
-    })
-  })
-
-  runner.on('compileComplete', data => {
-    view.postMessage({
-      cmd: 'compileComplete',
-      doc: doc.fileName,
-      code: data
+      code: code,
+      time: time
     })
   })
 }
@@ -85,7 +103,7 @@ function registerRunner(doc) {
 vscode.window.onDidChangeActiveTextEditor(e => {
   view.postMessage({
     cmd: 'changeDoc',
-    doc: e ? e.document.fileName : undefined
+    doc: e ? e.document.fileName : ''
   })
   if (e) {
     registerRunner(e.document)
@@ -97,7 +115,7 @@ module.exports = {
   onReceiveMsg
 }
 
-// init changeDoc
+// init changeDoc closeDoc
 // stdout stderr runFinish compileComplete
 
 // compile run stop

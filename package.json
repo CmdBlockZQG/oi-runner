@@ -13,8 +13,8 @@
   "main": "./src/extension.js",
   "contributes": {
     "commands": [{
-      "command": "oi-runner.ping",
-      "title": "test OI Runner"
+      "command": "oi-runner.activate",
+      "title": "activate OI Runner"
     }],
     "configuration":[
       {
@@ -23,15 +23,24 @@
           "oi-runner.commands": {
             "type": "object",
             "default": {
-              "C++14 -O2": ["cd [dir]; g++  -std=c++14 -o2 -o \"[filename]\"", "&\"[filedir]\""]
+              "C++14 -O2": [
+                ["g++", ["[file]", "-o[file-]", "-std=c++14", "-O2", "-Wall"]],
+                ["[file-].exe", []]
+              ],
+              "python": [
+                ["", []],
+                ["python", ["[file]"]]
+              ]
             },
             "description": "Commands to run when compile or run."
           },
-          "oi-runner.shell": {
-            "type": "string",
-            "default": "powershell",
-            "enum": ["sh", "powershell", "cmd"],
-            "description": "Use different shell to run command. Use powershell(recommended if available) or cmd on Windows and sh on Linux."
+          "oi-runner.exts": {
+            "type": "object",
+            "default": {
+              "cpp": "C++14 -O2",
+              "py": "python"
+            },
+            "description": "default command to use depend on filename extension"
           }
         }
       }
