@@ -21,6 +21,10 @@ function init(webviewView) {
     exts: conf.get('exts'),
     doc: curTextEditor ? curTextEditor.document.fileName : ''
   })
+  view.postMessage({
+    cmd: 'switchColorTheme',
+    type: vscode.window.activeColorTheme.kind
+  })
 }
 
 function onReceiveMsg(msg) {
@@ -108,6 +112,13 @@ vscode.window.onDidChangeActiveTextEditor(e => {
   if (e) {
     registerRunner(e.document)
   }
+})
+
+vscode.window.onDidChangeActiveColorTheme(e => {
+  view.postMessage({
+    cmd: 'switchColorTheme',
+    type: e.kind
+  })
 })
 
 module.exports = {

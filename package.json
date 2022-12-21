@@ -2,6 +2,7 @@
   "name": "oi-runner",
   "displayName": "OI Runner",
   "description": "A VScode extension for OIers and ACMers",
+  "repository": "https://github.com/CmdBlockZQG/oi-runner",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
@@ -9,13 +10,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": ["onCommand:oi-runner.activate"],
+  "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
-    "commands": [{
-      "command": "oi-runner.activate",
-      "title": "activate OI Runner"
-    }],
     "configuration":[
       {
         "title": "OI Runner",
@@ -40,7 +37,7 @@
               "cpp": "C++14 -O2",
               "py": "python"
             },
-            "description": "default command to use depend on filename extension"
+            "description": "Default command to use depend on filename extension."
           }
         }
       }
@@ -50,7 +47,7 @@
         {
           "id": "oi-runner",
           "title": "OI Runner",
-          "icon": ""
+          "icon": "assets/run.svg"
         }
       ]
     },

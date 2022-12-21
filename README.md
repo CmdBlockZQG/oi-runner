@@ -1,6 +1,6 @@
 # oi-runner README
 
-This is the README for your extension "oi-runner". After writing up a brief description, we recommend including the following sections.
+A VScode extension for OIers and ACMers
 
 ## Features
 

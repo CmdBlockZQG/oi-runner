@@ -14,10 +14,6 @@ function activate(context) {
       }
     )
   )
-
-  context.subscriptions.push(vscode.commands.registerCommand('oi-runner.activate', () => {
-    vscode.window.showInformationMessage('OI Runner activated.')
-  }))
 }
 
 class PanelProvider {
@@ -67,9 +63,7 @@ class PanelProvider {
   }
 }
 
-function deactivate() {
-  vscode.window.showInformationMessage('OI Runner deactivated.')
-}
+function deactivate() { }
 
 module.exports = {
   activate,

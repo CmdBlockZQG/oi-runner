@@ -1,11 +1,7 @@
 <template>
   <div id="container">
-    <textarea
-      v-model="stdinInput"
-      :disabled="!curDoc || curState.status"
-    ></textarea>
-    <vscode-text-area readonly :value="curState.stdout" :disabled="!curDoc">STDOUT</vscode-text-area>
-    <div id="action">
+    
+    <div id="action-bar">
 
       <vscode-dropdown
         ref="langDropdown"
@@ -48,6 +44,31 @@
       </vscode-button>
 
     </div>
+    <div id="main">
+      <div class="editor-area">
+        <div class="label">INPUT</div>
+        <codemirror
+          :style="{ height: 'calc(100% - 16px)' }"
+          v-model="stdinInput"
+          :disabled="!curDoc || curState.status"
+          :indent-with-tab="true"
+          :tab-size="4"
+          :extensions="cmExtensions"
+        />
+      </div>
+
+      <div class="editor-area">
+        <div class="label">OUTPUT</div>
+        <codemirror
+          :style="{ height: 'calc(100% - 16px)' }"
+          :modelValue="curState.stdout"
+          :disabled="true"
+          :indent-with-tab="true"
+          :tab-size="4"
+          :extensions="cmExtensions"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,6 +81,9 @@
     vsCodeOption,
     vsCodeTextArea
   } from '@vscode/webview-ui-toolkit'
+  import { Codemirror } from 'vue-codemirror'
+  import { basicSetup } from 'codemirror'
+  import cmTheme from './cm-theme.js'
 
   const vscode = inject('vscode')
   
@@ -204,23 +228,54 @@
           }
         }
         break
+      case 'switchColorTheme':
+        cmThemeType.value = x.type
+        break
     }
+  })
+  const cmThemeType = ref(2)
+  const cmExtensions = computed(() => {
+    console.log(cmThemeType.value)
+    return [basicSetup, cmThemeType.value === 1 || cmThemeType.value === 4 ? cmTheme.light : cmTheme.dark]
   })
 
 </script>
 
 <style scoped>
-#action {
-  position: absolute;
-  right: 20px;
-  top: 4px;
-
+#action-bar {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+
+  height: 32px;
 }
 
-#action vscode-button {
+#action-bar vscode-button {
   margin-left: 8px;
+}
+
+#main {
+  height: calc(100vh - 32px);
+}
+
+.label {
+  height: 16px; line-height: 16px;
+}
+
+.editor-area {
+  box-sizing: border-box;
+  padding: 4px;
+
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+}
+
+@media screen and (max-width: 648px) {
+  .editor-area {
+    width: 100%;
+    height: 50%;
+    display: block;
+  }
 }
 </style>

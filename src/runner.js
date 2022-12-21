@@ -12,7 +12,6 @@ class Runner extends EventEmitter {
 
     this._status = 0 // 0: idle 1: compiling 2: running
 
-
     const f = this._document.fileName
     const getDir = () => {
       const a = f.match(/(.*[\/\\]).*/)
@@ -55,9 +54,7 @@ class Runner extends EventEmitter {
       this.emit('compileComplete', 0)
       return
     }
-    console.log(cmd)
     cmd = this._convertCmd(cmd)
-    console.log(cmd)
 
     this._status = 1
 
@@ -126,7 +123,6 @@ class Runner extends EventEmitter {
 
   stop() {
     if (this._status) {
-      console.log('kill')
       this._process.kill()
     }
   }
@@ -140,7 +136,6 @@ class Runner extends EventEmitter {
   _convertCmd(cmd) {
     const replace = (s) => {
       let cmd = s
-      console.log('213123', this._dir)
       cmd = cmd.replace(/\[dir\]/g, this._dir)
       cmd = cmd.replace(/\[path\]/g, this._path)
       cmd = cmd.replace(/\[file\]/g, this._fileName)

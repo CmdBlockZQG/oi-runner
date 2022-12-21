@@ -4,6 +4,16 @@ test/**
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md
+
 **/jsconfig.json
 **/*.map
 **/.eslintrc.json
+**/.gitignore
+
+
+ui/node_modules/**
+ui/src/**
+ui/package.json
+ui/package-lock.json
+ui/index.html
+ui/vite.config.js
