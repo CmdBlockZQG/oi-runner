@@ -11,6 +11,7 @@ class Runner extends EventEmitter {
     this._process = null
 
     this._status = 0 // 0: idle 1: compiling 2: running
+    this._error = false
 
     const f = this._document.fileName
     const getDir = () => {
@@ -69,9 +70,13 @@ class Runner extends EventEmitter {
       this.emit('compileStderr', data.toString())
     })
 
-    process.on('close', code => {
+    process.on('close', code => { // 总是会触发，无论是否错误
       this.emit('compileComplete', code)
       this._status = 0
+    })
+
+    process.on('error', err => {
+      this.emit('compileStderr', err.toString() + '\n')
     })
 
   }
@@ -110,13 +115,23 @@ class Runner extends EventEmitter {
       this.emit('runStderr', data.toString())
     })
 
-    process.on('exit', () => {
+    process.on('exit', () => { // 错误时可能触发，也可能不
+      if (this._error) {
+        return
+      }
       timeStamp = Date.now() - timeStamp
     })
 
-    process.on('close', code => {
+    process.on('close', code => { // 总是会触发，无论是否错误
+      this._error = false
       this._status = 0
       this.emit('runFinish', code, timeStamp)
+    })
+
+    process.on('error', err => {
+      this._error = true
+      this.emit('runStderr', err.toString() + '\n')
+      timeStamp = Date.now() - timeStamp
     })
 
   }
