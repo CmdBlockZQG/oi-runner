@@ -7,7 +7,7 @@ function activate(context) {
     vscode.window.registerWebviewViewProvider(
       provider.viewType,
       provider,
-      { 
+      {
         webviewOptions: {
           retainContextWhenHidden: true
         }

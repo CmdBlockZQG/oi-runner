@@ -20,8 +20,8 @@
           "oi-runner.commands": {
             "type": "object",
             "default": {
-              "C++14 -O2": [
-                ["g++", ["[file]", "-o[file-]", "-std=c++14", "-O2", "-Wall"]],
+              "C++11 -O2": [
+                ["g++", ["[file]", "-o[file-]", "-std=c++11", "-O2", "-Wall"]],
                 ["[file-].exe", []]
               ],
               "python": [
@@ -34,7 +34,7 @@
           "oi-runner.exts": {
             "type": "object",
             "default": {
-              "cpp": "C++14 -O2",
+              "cpp": "C++11 -O2",
               "py": "python"
             },
             "description": "Default command to use depend on filename extension."

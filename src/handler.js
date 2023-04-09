@@ -110,7 +110,10 @@ vscode.window.onDidChangeActiveTextEditor(e => {
     doc: e ? e.document.fileName : ''
   })
   if (e) {
-    registerRunner(e.document)
+    const doc = e.document
+    if (!runners[doc.fileName]) {
+      registerRunner(doc)
+    }
   }
 })
 
