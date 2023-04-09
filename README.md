@@ -1,4 +1,4 @@
-# OI-Runner
+# OI Runner
 专为OIer和ACMer设计的VSCode插件，用于运行竞赛单文件代码。
 
 ![demo1](./assets/demo1.png)

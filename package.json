@@ -1,9 +1,11 @@
 {
   "name": "oi-runner",
   "displayName": "OI Runner",
-  "description": "A VScode extension for OIers and ACMers",
+  "description": "运行竞赛单文件代码 专为OIer和ACMer设计",
   "repository": "https://github.com/CmdBlockZQG/oi-runner",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "icon": "assets/logo.png",
+  "publisher": "CmdBlock",
   "engines": {
     "vscode": "^1.74.0"
   },

@@ -106,7 +106,19 @@
     }
   })
   const curDoc = ref('')
-  const curState = computed(() => state.value[curDoc.value])
+  const curState = computed(() => {
+    const t = state.value[curDoc.value]
+    if (t) {
+      return t
+    } else {
+      return {
+        status: 0,
+        stdin: '',
+        stdout: '',
+        lang: ''
+      }
+    }
+  })
 
   const stdinInput = ref('')
 
