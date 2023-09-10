@@ -1,5 +1,6 @@
 const { EventEmitter } = require('events')
 const { spawn } = require('child_process')
+const { platform } = require('process')
 const vscode = require('vscode')
 
 class Runner extends EventEmitter {
@@ -155,6 +156,7 @@ class Runner extends EventEmitter {
       cmd = cmd.replace(/\[path\]/g, this._path)
       cmd = cmd.replace(/\[file\]/g, this._fileName)
       cmd = cmd.replace(/\[file-\]/g, this._fileNameWithoutExt)
+      cmd = cmd.replace(/\[ext\]/g, platform === 'win32' ? '.exe' : '') 
       return cmd
     }
     const res = [replace(cmd[0]), []]
