@@ -124,6 +124,18 @@ vscode.window.onDidChangeActiveColorTheme(e => {
   })
 })
 
+vscode.workspace.onDidChangeConfiguration((e) => {
+  if(!e.affectsConfiguration('oi-runner')) return
+  conf = vscode.workspace.getConfiguration('oi-runner')
+  const curTextEditor = vscode.window.activeTextEditor
+  view.postMessage({
+    cmd: 'init',
+    langs: Object.keys(conf.get('commands')),
+    exts: conf.get('exts'),
+    doc: curTextEditor ? curTextEditor.document.fileName : ''
+  })
+});
+
 module.exports = {
   init,
   onReceiveMsg
