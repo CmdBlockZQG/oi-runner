@@ -3,7 +3,7 @@
   "displayName": "OI Runner",
   "description": "运行竞赛单文件代码 专为OIer和ACMer设计",
   "repository": "https://github.com/CmdBlockZQG/oi-runner",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "icon": "assets/logo.png",
   "publisher": "CmdBlock",
   "engines": {
