@@ -2,6 +2,7 @@ const { EventEmitter } = require('events')
 const { spawn } = require('child_process')
 const { platform } = require('process')
 const vscode = require('vscode')
+const { statfsSync } = require('fs')
 
 class Runner extends EventEmitter {
   constructor(document, config) {
@@ -97,11 +98,17 @@ class Runner extends EventEmitter {
       this.emit('runFinish', 0, 0)
       return
     }
+
+    const addDotSlash = (platform !== 'win32' &&
+      (cmd[0].startsWith('[file]') || cmd[0].startsWith('[file-]'))
+    ) ? './' : ''
+
     cmd = this._convertCmd(cmd)
 
     this._status = 2
 
-    const process = spawn(`${platform !== 'win32' ? './' : ''}${cmd[0]}`, cmd[1], { cwd: this._dir })
+    const process = spawn(`${addDotSlash}${cmd[0]}`, cmd[1], { cwd: this._dir })
+
     let timeStamp = Date.now()
     this._process = process
 
@@ -156,7 +163,7 @@ class Runner extends EventEmitter {
       cmd = cmd.replace(/\[path\]/g, this._path)
       cmd = cmd.replace(/\[file\]/g, this._fileName)
       cmd = cmd.replace(/\[file-\]/g, this._fileNameWithoutExt)
-      cmd = cmd.replace(/\[ext\]/g, platform === 'win32' ? '.exe' : '') 
+      cmd = cmd.replace(/\[ext\]/g, platform === 'win32' ? '.exe' : '')
       return cmd
     }
     const res = [replace(cmd[0]), []]
