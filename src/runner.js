@@ -101,7 +101,7 @@ class Runner extends EventEmitter {
 
     this._status = 2
 
-    const process = spawn(cmd[0], cmd[1], { cwd: this._dir })
+    const process = spawn(`${platform !== 'win32' ? './' : ''}${cmd[0]}`, cmd[1], { cwd: this._dir })
     let timeStamp = Date.now()
     this._process = process
 
