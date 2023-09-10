@@ -21,7 +21,7 @@
 
 `oi-runner.commands` 配置项指定了选择不同语言选项时，要执行的不同命令。
 
-```json
+```jsonc
 "oi-runner.commands": {
   "C++11 -O2": [
     // g++ test.cpp -otest -std=c++11 -O2 -Wall
@@ -59,7 +59,7 @@
 
 `oi-runner.commands` 配置项指定了对于不同拓展名的代码文件，默认使用的语言选项。
 
-```json
+```jsonc
 "oi-runner.exts": {
   "cpp": "C++11 -O2",
   "py": "python"
