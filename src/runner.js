@@ -2,7 +2,6 @@ const { EventEmitter } = require('events')
 const { spawn } = require('child_process')
 const { platform } = require('process')
 const vscode = require('vscode')
-const { statfsSync } = require('fs')
 
 class Runner extends EventEmitter {
   constructor(document, config) {
