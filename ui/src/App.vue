@@ -221,7 +221,11 @@
         state.value[x.doc].stdout += `\n--------\nexit with code ${x.code} in ${x.time / 1000}s`
         state.value[x.doc].status = 0
         break
+      case 'compile':
+        state.value[x.doc].stdout = 'Compiling...'
+        break
       case 'compileComplete':
+        state.value[x.doc].stdout = ''
         if (state.value[x.doc].status === 1) {
           state.value[x.doc].status = 0
           return
